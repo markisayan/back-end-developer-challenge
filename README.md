@@ -1,5 +1,35 @@
 # DDB Back End Developer Challenge
 
+## Solution
+
+### About
+
+This project is built with Nest.js, Prisma + SQLite and Jest for testing. Although it's a bad practice but the database path is hardcoded so no environment variables are needed. 
+
+### Running the project
+
+1. Clone the repository
+2. From the `backend` directory run `npm install`
+3. Run `npm run start:dev`
+4. The server will be running on `http://localhost:3000`
+
+### Endpoints
+- GET `/characters/briv` - Get character information
+- POST `/characters/briv/damage` - Body ex.: `{"amount": 5; "type": "fire"}` Deal damage to the character
+- POST `/characters/briv/heal` - Body ex.: `{"amount": 10}` Heal the character
+- POST `/characters/briv/temporary-hp` - Body ex.: `{"amount": 5}` Add temporary HP to the character
+
+### Testing
+- Run `npm run test` to run the tests
+
+### Database
+
+Data is stored in an SQLite db located in `backend/prisma/dev.db`. Table creation sql script as well as data seeding sql script is located in `backend/prisma/migrations` directory. ERD is shown below.
+
+![](db.png)
+
+---
+
 ### Overview
 This task focuses on creating an API for managing a player character's Hit Points (HP) within our game. The API will enable clients to perform various operations related to HP, including dealing damage of different types, considering character resistances and immunities, healing, and adding temporary Hit Points. The task requires building a service that interacts with HP data provided in the `briv.json` file and persists throughout the application's lifetime.
 
