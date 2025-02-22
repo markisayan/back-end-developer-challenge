@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model characters {
+  id                   Int                  @id @default(autoincrement())
+  user_name            String               @unique
+  name                 String
+  level                Int
+  hit_points           Int
+  temporary_hit_points Int                  @default(0)
+  strength             Int
+  dexterity            Int
+  constitution         Int
+  intelligence         Int
+  wisdom               Int
+  charisma             Int
+  created_at           DateTime             @default(now())
+  updated_at           DateTime             @updatedAt
+  character_items      character_items[]
+  character_classes    character_classes[]
+  character_defenses   character_defenses[]
+}
+
+model classes {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  hit_dice_value    Int
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  character_classes character_classes[]
+}
+
+model character_classes {
+  id           Int        @id @default(autoincrement())
+  character_id Int
+  class_id     Int
+  class_level  Int
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+  character    characters @relation(fields: [character_id], references: [id])
+  class        classes    @relation(fields: [class_id], references: [id])
+}
+
+model items {
+  id              Int               @id @default(autoincrement())
+  name            String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  character_items character_items[]
+}
+
+model item_modifier_objects {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  character_items character_items[]
+}
+
+model item_modifier_value_types {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  character_items character_items[]
+}
+
+model character_items {
+  id                          Int                       @id @default(autoincrement())
+  character_id                Int
+  item_id                     Int
+  item_modifier_object_id     Int
+  item_modifier_value_type_id Int
+  item_modifier_value         Int
+  created_at                  DateTime                  @default(now())
+  updated_at                  DateTime                  @updatedAt
+  character                   characters                @relation(fields: [character_id], references: [id])
+  item                        items                     @relation(fields: [item_id], references: [id])
+  item_modifier_object        item_modifier_objects     @relation(fields: [item_modifier_object_id], references: [id])
+  item_modifier_value_type    item_modifier_value_types @relation(fields: [item_modifier_value_type_id], references: [id])
+}
+
+model defense_types {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  character_defenses character_defenses[]
+}
+
+model character_defenses {
+  id              Int           @id @default(autoincrement())
+  character_id    Int
+  damage_type_id  Int
+  defense_type_id Int
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  damage_type     damage_types  @relation(fields: [damage_type_id], references: [id])
+  defense_type    defense_types @relation(fields: [defense_type_id], references: [id])
+  character       characters    @relation(fields: [character_id], references: [id])
+}
+
+model damage_types {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  character_defenses character_defenses[]
+}
